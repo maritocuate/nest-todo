@@ -13,12 +13,9 @@ export class TasksService {
     const newTask = new this.taskModel(createTaskDto);
     return newTask.save();
   }
-  /* create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
-  } */
 
-  findAll() {
-    return `This action returns all tasks`;
+  async findAll(): Promise<Task[]> {
+    return this.taskModel.find().exec();
   }
 
   findOne(id: number) {
