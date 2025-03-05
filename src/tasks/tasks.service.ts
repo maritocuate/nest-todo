@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Task } from './entities/task.entity';
 import { isValidObjectId, Model } from 'mongoose';
@@ -20,10 +19,6 @@ export class TasksService {
 
   async findAll(): Promise<Task[]> {
     return this.taskModel.find().exec();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
   }
 
   async updateTitle(id: string, title: string): Promise<Task> {
