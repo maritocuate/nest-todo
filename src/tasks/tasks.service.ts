@@ -26,7 +26,8 @@ export class TasksService {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: string): Promise<boolean> {
+    const result = await this.taskModel.findByIdAndDelete(id);
+    return !!result;
   }
 }
