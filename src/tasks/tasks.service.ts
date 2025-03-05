@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Task } from './entities/task.entity';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 
 @Injectable()
 export class TasksService {
@@ -22,8 +26,16 @@ export class TasksService {
     return `This action returns a #${id} task`;
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async updateTitle(id: string, title: string): Promise<Task> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid task ID');
+    }
+    const task = await this.taskModel.findById(id);
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+    task.title = title;
+    return task.save();
   }
 
   async remove(id: string): Promise<boolean> {
